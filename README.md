@@ -332,7 +332,14 @@ Se generaron nuevos puntos de origen y se repitió la validación.
 Todas las unidades evaluadas quedaron por debajo de 750 m.
 
 ## Estado
-Validación completada para las unidades analizadas.
+Estado: cerrado mediante decisión metodológica.
+Inicialmente se identificó como dificultad la definición de puntos de origen representativos para clusters espacialmente extensos. Se evaluaron centroides ponderados por población, puntos ajustados mediante un criterio máximo de 750 m y subdivisiones internas de los clusters 4 y 6. Aunque estas estrategias permitieron corregir las distancias entre los puntos y los AHDI asociados, en reunión posterior con la dirección del proyecto se decidió no utilizar los clusters de AHDI como unidad geográfica definitiva. Se estableció el asentamiento como unidad principal de análisis, reservando la escala de manzana para indicadores de conectividad interna y utilizando el asentamiento como origen para los análisis de accesibilidad hacia los centros de empleo.
+
+Decisión vigente:
+- Unidad geográfica principal: AHDI/asentamiento.
+- Escala desagregada para conectividad: manzana.
+- Accesibilidad: asentamiento → centros/subcentros de empleo.
+- Clusters de AHDI: alternativa metodológica evaluada, no adoptada como unidad final.
 
 ---
 

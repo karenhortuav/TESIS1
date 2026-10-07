@@ -1,7 +1,16 @@
+# Objetivos
+
+1. Identificar las principales barreras de acceso al transporte público en los asentamientos humanos de desarrollo incompleto de Cali.
+
+2. Describir las condiciones de accesibilidad de los habitantes de los asentamientos humanos de desarrollo incompleto y su relación con la ubicación de los principales centros laborales en la ciudad.
+  
+3. Explorar patrones espaciales que influyen en el acceso a las oportunidades laborales de los habitantes de los asentamientos humanos de desarrollo incompleto de Cali según sus niveles de accesibilidad al transporte público y su proximidad a los centros de empleo. 
+
+
 # Bitácora del proyecto
 
 ## Proyecto
-Análisis espacial de asentamientos humanos de desarrollo incompleto (AHDI) y accesibilidad territorial en Santiago de Cali.
+DISPARIDADES ESPACIALES EN LA ACCESIBILIDAD A LAS OPORTUNIDADES LABORALES: UN ANÁLISIS DE LAS BARRERAS DE ACCESO AL TRANSPORTE PÚBLICO EN LOS ASENTAMIENTOS HUMANOS DE DESARROLLO INCOMPLETO DE CALI
 
 ## Objetivo de la bitácora
 Registrar de manera cronológica los avances metodológicos, decisiones tomadas, insumos utilizados, dificultades encontradas y actividades pendientes del proyecto, con el propósito de garantizar trazabilidad y reproducibilidad del proceso de investigación.

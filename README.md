@@ -405,3 +405,120 @@ Escala de análisis.
 Datos utilizados.
 Aporte específico al proyecto.
 Limitaciones.
+
+## 08 de octubre de 2026 – Preparación de la prueba piloto de accesibilidad
+
+### Actividades realizadas
+
+Durante la jornada se avanzó en la preparación de la prueba piloto para la simulación de viajes entre los AHDI y los centros de empleo.
+
+En primer lugar, se definió una muestra piloto de 19 AHDI a partir de la capa maestra de 188 asentamientos. La selección se realizó buscando representatividad espacial y cobertura territorial, evitando concentrar todos los casos en una misma zona de la ciudad. Para algunas comunas con distribución espacial dispersa se seleccionó más de un asentamiento representativo.
+
+Los 19 AHDI seleccionados fueron exportados como una capa independiente y posteriormente convertidos a puntos mediante la herramienta `Feature To Point`, garantizando que cada punto se ubicara dentro del polígono del asentamiento.
+
+A cada punto de origen se le calcularon coordenadas geográficas en el sistema WGS 1984 (EPSG:4326), obteniendo los campos de latitud y longitud necesarios para su posterior utilización en las simulaciones mediante Google Maps.
+
+### Centros de empleo
+
+A partir de la revisión de la tesis de Nicolás se identificaron los seis centros de empleo utilizados como destinos en el análisis de accesibilidad:
+
+- Versalles
+- Industrial
+- San Fernando Nuevo
+- Departamental
+- El Gran Limonar
+- Ciudad Campestre
+
+Debido a que no se cuenta actualmente con el archivo original `CENTROS DE EMPLEOS.xlsx` (no sabemos si existe) utilizado en dicha investigación, se construyó de manera provisional una capa con estos seis centros de empleo.
+
+Los barrios correspondientes fueron seleccionados en ArcGIS Pro y convertidos a puntos representativos mediante `Feature To Point`. Posteriormente se calcularon sus coordenadas geográficas en WGS 1984.
+
+Esta capa se considera provisional y deberá validarse con el director, principalmente para confirmar si los puntos utilizados originalmente corresponden a centroides de los barrios, puntos interiores o a una localización definida mediante otro criterio relacionado con la concentración de empleo.
+
+### Preparación de los archivos para la simulación
+
+Se exportaron a formato `.xlsx` las siguientes tablas:
+
+- `ORIGENES_AHDI_PILOTO_19.xlsx`
+- `CENTROS_EMPLEO_6_PROVISIONALES.xlsx`
+
+Los archivos fueron cargados en Google Drive y conectados correctamente con Google Colab.
+
+En Colab se verificó la lectura de ambas bases:
+
+- 19 registros correspondientes a los AHDI piloto.
+- 6 registros correspondientes a los centros de empleo.
+
+Posteriormente se construyeron tablas simplificadas para la simulación con la siguiente estructura:
+
+**Orígenes:**
+- ID_AHDI
+- AHDI
+- Latitud
+- Longitud
+
+**Destinos:**
+- Id_Centro
+- Centro_Empleo
+- Latitud
+- Longitud
+
+Se verificó que los 19 AHDI y los 6 centros contaran con coordenadas válidas.
+
+### Construcción de la matriz origen-destino
+
+A partir de los 19 AHDI piloto y los 6 centros de empleo se generaron todas las combinaciones posibles de origen y destino:
+
+19 AHDI × 6 centros de empleo = 114 pares origen-destino.
+
+Se creó una matriz base con los campos:
+
+- ID_AHDI
+- Nombre del AHDI
+- Latitud de origen
+- Longitud de origen
+- ID del centro de empleo
+- Nombre del centro de empleo
+- Latitud de destino
+- Longitud de destino
+
+Esta matriz queda preparada para incorporar posteriormente los tiempos de desplazamiento obtenidos mediante la API de Google Maps.
+
+### Revisión del código
+
+Se revisó el código suministrado por el director (`Código_28-09-2026`) y se identificó que fue diseñado originalmente para trabajar con barrios como origen y centros de empleo como destino.
+
+Para el presente estudio será necesario adaptarlo para utilizar AHDI como unidades de origen.
+
+También se identificó que el código actualizado trabaja con diferentes franjas horarias y contempla simulaciones en transporte público y vehículo particular.
+
+### Dificultades y aspectos pendientes
+
+El principal aspecto pendiente para ejecutar la simulación corresponde al acceso a la API de Google Maps.
+
+Actualmente no se cuenta con una API Key propia ni se conoce si existe un proyecto de Google Maps Platform disponible dentro del grupo de investigación.
+
+También está pendiente confirmar si existe el archivo original `CENTROS DE EMPLEOS.xlsx` utilizado en la tesis de Nicolás o si los seis centros deben ser reconstruidos a partir de la información espacial y laboral disponible.
+
+### Preguntas para la próxima reunión
+
+1. Confirmar si existe el archivo original `CENTROS DE EMPLEOS.xlsx` utilizado en la tesis de Nicolás.
+2. Confirmar el criterio espacial utilizado para definir el punto representativo de cada centro de empleo.
+3. Definir si se utilizará una API Key del grupo de investigación o si será necesario crear un proyecto propio en Google Maps Platform.
+4. Confirmar si la prueba piloto debe ejecutarse utilizando el código actualizado con diferentes franjas horarias o si debe adaptarse el código empleado originalmente por Nicolás.
+5. Confirmar qué variables de tiempo deben conservarse para el posterior cálculo del indicador de accesibilidad.
+
+### Estado actual
+
+La prueba piloto se encuentra preparada hasta la construcción de la matriz origen-destino.
+
+Actualmente se dispone de:
+
+- 19 AHDI piloto espacialmente distribuidos.
+- 19 puntos de origen con coordenadas geográficas.
+- 6 centros de empleo provisionales con coordenadas geográficas.
+- 114 pares origen-destino preparados para simulación.
+- Archivos de entrada organizados en formato Excel.
+- Código cargado y entorno de trabajo preparado en Google Colab.
+
+El siguiente paso será validar los centros de empleo y el acceso a la API de Google Maps para realizar las primeras simulaciones de viaje.

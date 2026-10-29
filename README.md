@@ -537,6 +537,10 @@ Se partió de la capa `AHDI_MAESTRA_188`.
 
 Mediante `Summary Statistics` se identificaron inicialmente 67 denominaciones de barrio asociadas a los 188 AHDI.
 
+Como verificación del agrupamiento, se realizó un resumen adicional sobre el campo `FREQUENCY`. La suma obtenida fue de **188 AHDI**, confirmando que los 67 grupos barriales incluían la totalidad de los asentamientos de la capa maestra.
+
+Posteriormente se incorporó al proyecto la tabla `BARRIOS-ESTRATO` de la información suministrada por Santiago, con el propósito de contrastar los nombres de barrio y establecer una posible relación con los 67 barrios identificados. Debido a restricciones de lectura directa del archivo Excel en ArcGIS Pro, la hoja fue convertida a formato CSV y posteriormente exportada a la geodatabase del proyecto para continuar con los cruces y validaciones.
+
 El cruce inicial por nombre con la base de Santiago presentó diferencias de nomenclatura, por lo que se decidió realizar una validación espacial con la capa oficial de barrios.
 
 #### 2. Validación espacial de barrios

@@ -522,3 +522,198 @@ Actualmente se dispone de:
 - Código cargado y entorno de trabajo preparado en Google Colab.
 
 El siguiente paso será validar los centros de empleo y el acceso a la API de Google Maps para realizar las primeras simulaciones de viaje.
+
+## 29 de octubre de 2026 – Preparación de centroides de barrio y unidades de manzana para el análisis de conectividad
+
+### Objetivo de la sesión
+
+Preparar los insumos espaciales requeridos para iniciar el análisis de conectividad desde las manzanas que conforman los AHDI hacia los centroides de barrio utilizados previamente en las simulaciones de accesibilidad.
+
+### Actividades realizadas
+
+#### 1. Identificación de barrios con AHDI
+
+Se partió de la capa `AHDI_MAESTRA_188`.
+
+Mediante `Summary Statistics` se identificaron inicialmente 67 denominaciones de barrio asociadas a los 188 AHDI.
+
+El cruce inicial por nombre con la base de Santiago presentó diferencias de nomenclatura, por lo que se decidió realizar una validación espacial con la capa oficial de barrios.
+
+#### 2. Validación espacial de barrios
+
+Se utilizó `Spatial Join` entre los AHDI y la capa oficial de barrios.
+
+Resultados:
+
+- 146 AHDI con correspondencia directa mediante intersección.
+- 42 AHDI sin correspondencia directa.
+
+Los 42 casos se analizaron por comuna/corregimiento:
+
+- 39 correspondían a corregimientos.
+- 3 correspondían a zonas urbanas.
+
+Casos urbanos resueltos:
+
+- El 30 → Brisas de Mayo.
+- Jarillón Floralia Río Cali → Ciudadela Floralia.
+- Jarillón Floralia Río Cauca → Paso del Comercio.
+
+Para Jarillón Floralia Río Cali se utilizó `Generate Near Table` restringiendo la búsqueda a barrios de Comuna 06. Ciudadela Floralia resultó ser el barrio más cercano, con una distancia aproximada de 14,77 m.
+
+Resultado final:
+
+- 149 AHDI urbanos con barrio validado.
+- 39 AHDI de corregimientos separados para revisión metodológica posterior.
+
+#### 3. Consolidación de barrios
+
+Mediante `Summary Statistics` se identificaron:
+
+**54 barrios oficiales** asociados a los 149 AHDI urbanos.
+
+Se creó el campo `ID_BARRIO_KEY` para homologar códigos de barrio entre las diferentes fuentes.
+
+El Join con `BARRIOS_ESTRATO_SANTIAGO` produjo:
+
+**0 de 54 barrios sin correspondencia.**
+
+#### 4. Filtrado de la matriz de Santiago
+
+Se preparó la hoja `SIMULACION-HANSEN` para su uso en ArcGIS.
+
+Después de limpiar encabezados y exportar a la geodatabase se obtuvieron:
+
+**2.172 registros válidos.**
+
+Se filtró la matriz utilizando los 54 barrios validados.
+
+Resultado:
+
+**54 barrios × 6 centros de empleo = 324 registros.**
+
+Tabla generada:
+
+`SIMULACION_HANSEN_AHDI_324`
+
+#### 5. Obtención de coordenadas únicas por barrio
+
+Se utilizó `Summary Statistics` para consolidar las seis filas de cada barrio.
+
+Resultado:
+
+**54 registros únicos.**
+
+Cada registro conservó:
+
+- ID del barrio.
+- Nombre del barrio.
+- Latitud del origen.
+- Longitud del origen.
+
+La frecuencia fue igual a 6 para todos los barrios, confirmando la presencia de los seis centros de empleo.
+
+Tabla resultante:
+
+`Centroides_Barrios_AHDI_54_tabla`
+
+#### 6. Creación de centroides de barrio
+
+Las coordenadas fueron convertidas a campos Double.
+
+Se utilizó `XY Table To Point`:
+
+- X = longitud.
+- Y = latitud.
+- Sistema = WGS 1984.
+
+Capa resultante:
+
+`Centroides_Barrios_AHDI_54`
+
+Posteriormente fue proyectada a:
+
+**MAGNA Cali Valle del Cauca 2009**
+
+Capa:
+
+`Centroides_Barrios_AHDI_54_MAGNA`
+
+#### 7. Selección de manzanas asociadas a los AHDI
+
+Se utilizó la capa `vulnerabilidad`, compuesta por 13.151 manzanas.
+
+Se realizó `Select By Location` utilizando como criterio que el centro de la manzana estuviera dentro de un AHDI urbano.
+
+Resultado:
+
+**1.240 manzanas seleccionadas.**
+
+Capa:
+
+`Manzanas_AHDI_149`
+
+Posteriormente se realizó un `Spatial Join` con los AHDI para incorporar los identificadores de asentamiento y barrio.
+
+Validación:
+
+**0 de 1.240 manzanas con ID_AHDI nulo.**
+
+#### 8. Generación de puntos de manzana
+
+Se utilizó `Feature To Point` con la opción `Inside`.
+
+Resultado:
+
+**1.240 puntos de manzana.**
+
+Capa:
+
+`Puntos_Manzanas_AHDI_1240`
+
+Posteriormente se realizó un `Join Field` con los 54 centroides de barrio.
+
+Se incorporaron:
+
+- `ID_BARRIO_KEY`
+- `BARRIO_VAL`
+- `LAT_DBL`
+- `LON_DBL`
+- `X_CENTRO`
+- `Y_CENTRO`
+
+Validación:
+
+**0 de 1.240 puntos sin centroide asociado.**
+
+### Estructura espacial obtenida
+
+La información queda organizada de la siguiente manera:
+
+`Manzana → AHDI → Barrio validado → Centroide de barrio`
+
+Esta estructura constituye el insumo base para el análisis de conectividad.
+
+### Cuello de botella / aspecto pendiente
+
+Actualmente no se dispone de una red previamente definida para realizar el análisis de conectividad.
+
+Se identificó en IDESC una capa de `Jerarquización vial` con aproximadamente 24.930 segmentos de polilínea y campos como:
+
+- `tipo_via`
+- `estado_act`
+- `nombre`
+
+La capa incluye vías existentes y proyectadas.
+
+Antes de continuar es necesario validar con el director:
+
+1. Si esta capa debe utilizarse como base de la red.
+2. Si existe una capa vial o Network Dataset previamente preparado.
+3. Si el análisis debe representar movilidad peatonal, vial o ambas.
+4. Si deben utilizarse únicamente vías con estado `EXISTENTE`.
+5. Qué atributos y restricciones requiere la red para los indicadores de conectividad.
+
+### Próximo paso
+
+Validar la fuente de red vial y, una vez definida, preparar el Network Dataset o estructura de red necesaria para calcular las métricas de conectividad entre las 1.240 manzanas y los 54 centroides de barrio.
